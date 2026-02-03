@@ -1,0 +1,225 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.header h2 {
+    font-size: 20px;
+    color: #333;
+}
+
+.addBtn {
+    padding: 12px 24px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.addBtn:hover {
+    background: #5568d3;
+}
+
+.formCard {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 32px;
+}
+
+.formCard h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.inputGroup {
+    margin-bottom: 16px;
+}
+
+.inputGroup label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
+}
+
+.inputGroup input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.inputGroup input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.passwordWrapper {
+    position: relative;
+}
+
+.passwordWrapper input {
+    padding-right: 45px;
+}
+
+.togglePassword {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px 8px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.togglePassword:hover {
+    opacity: 1;
+}
+
+.submitBtn {
+    padding: 12px 32px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.submitBtn:hover {
+    background: #5568d3;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.agentCard {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    position: relative;
+}
+
+.deleteBtn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #fee;
+    border: 1px solid #fcc;
+    color: #c33;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    opacity: 0.7;
+}
+
+.deleteBtn:hover {
+    opacity: 1;
+    background: #fcc;
+    transform: scale(1.1);
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 auto 16px;
+}
+
+.agentCard h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.email {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 16px;
+}
+
+.skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.skillTag {
+    padding: 4px 12px;
+    background: #f0f0ff;
+    color: #667eea;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.statValue {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+}
+
+.statLabel {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+}
+
+.available,
+.unavailable {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.available {
+    color: #22c55e;
+}
+
+.unavailable {
+    color: #ef4444;
+}

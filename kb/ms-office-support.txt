@@ -1,0 +1,139 @@
+# Microsoft Office Support Knowledge Base
+
+## Excel Issues
+
+### Excel Formulas Not Calculating
+**Problem:** Excel formulas show the formula text instead of calculating results.
+
+**Solution:**
+1. Check if the cell is formatted as "Text" - change it to "General" or "Number"
+2. Go to Formulas > Calculation Options > Automatic
+3. Press Ctrl+Alt+F9 to force recalculation
+4. Check if there's an apostrophe (') before the formula
+5. Ensure the formula starts with an equals sign (=)
+
+### Excel File Won't Open
+**Problem:** Excel file fails to open or shows error message.
+
+**Solution:**
+1. Try opening Excel first, then File > Open
+2. Check if the file is on a network drive - copy locally first
+3. Try Open and Repair: File > Open > Select file > Click arrow on Open > Open and Repair
+4. Check if Protected View is blocking: File > Options > Trust Center > Protected View
+
+---
+
+## Word Issues
+
+### Word Document Recovery
+**Problem:** Need to recover unsaved or corrupted Word document.
+
+**Solution:**
+1. Check AutoRecover location: File > Options > Save > AutoRecover file location
+2. Look for .asd files in: C:\Users\[username]\AppData\Roaming\Microsoft\Word
+3. Use Document Recovery pane if Word crashed
+4. Try opening backup: File > Open > Browse > Select "Recover Unsaved Documents"
+
+### Word Formatting Issues
+**Problem:** Formatting is inconsistent or won't apply correctly.
+
+**Solution:**
+1. Clear all formatting: Ctrl+A then Ctrl+Space
+2. Use Styles instead of direct formatting
+3. Check for section breaks: View > Show/Hide
+4. Reset Normal.dotm template if corrupted
+
+---
+
+## Outlook Issues
+
+### Outlook Email Not Syncing
+**Problem:** Emails not sending, receiving, or syncing properly.
+
+**Solution:**
+1. Check internet connection
+2. Verify account settings: File > Account Settings
+3. Run Send/Receive: F9 or Send/Receive tab > Send/Receive All Folders
+4. Check Outbox for stuck emails
+5. Repair Outlook: Control Panel > Programs > Office > Change > Quick Repair
+6. Recreate Outlook profile if needed
+
+### Outlook Running Slowly
+**Problem:** Outlook is slow to start or respond.
+
+**Solution:**
+1. Disable unnecessary add-ins: File > Options > Add-ins
+2. Compact PST file: File > Account Settings > Data Files > Compact Now
+3. Archive old emails
+4. Disable RSS feeds if not used
+5. Run in Safe Mode to test: outlook.exe /safe
+
+---
+
+## PowerPoint Issues
+
+### PowerPoint Display Problems
+**Problem:** Slides not displaying correctly or graphics issues.
+
+**Solution:**
+1. Update graphics drivers
+2. Disable Hardware Graphics Acceleration: File > Options > Advanced > Display
+3. Check slide size matches projector: Design > Slide Size
+4. Save as new file to fix corruption
+5. Check for hidden objects: Selection Pane
+
+### PowerPoint Freezing During Presentation
+**Problem:** PowerPoint freezes or crashes during slideshow.
+
+**Solution:**
+1. Close other applications to free memory
+2. Compress media: File > Info > Compress Media
+3. Remove or reduce animations
+4. Embed fonts: File > Options > Save > Embed fonts
+5. Use Presenter View only if dual monitor works
+
+---
+
+## Office Activation Issues
+
+### Office Activation Error
+**Problem:** Office shows activation required or license error.
+
+**Solution:**
+1. Sign out and sign back in with Microsoft account
+2. Check subscription status at account.microsoft.com
+3. Run activation troubleshooter: Settings > Update & Security > Activation
+4. Repair Office: Control Panel > Programs > Office > Change > Online Repair
+5. Remove and reinstall Office if needed
+
+### Office Deactivated After Hardware Change
+**Problem:** Office deactivated after upgrading hardware.
+
+**Solution:**
+1. Sign in with the same Microsoft account
+2. Deactivate on old device: account.microsoft.com > Devices
+3. Reactivate on current device
+4. Contact Microsoft support if activation limit reached
+
+---
+
+## General Troubleshooting
+
+### Office Repair Steps
+1. Quick Repair: Control Panel > Programs > Microsoft Office > Change > Quick Repair
+2. Online Repair: Same path but select Online Repair (requires internet)
+3. Complete reinstall if repairs fail
+
+### Common Keyboard Shortcuts
+- Save: Ctrl+S
+- Undo: Ctrl+Z
+- Redo: Ctrl+Y
+- Copy: Ctrl+C
+- Paste: Ctrl+V
+- Find: Ctrl+F
+- Print: Ctrl+P
+
+---
+
+*Last updated: 2026-01-21*
+*Version: 1.0*

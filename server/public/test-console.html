@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hurAI Test Console</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #475569;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            color: var(--text-secondary);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .card h2 {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card h2 .icon {
+            font-size: 1.2rem;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result-section.show {
+            display: block;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+        }
+
+        .metric-value {
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-success { background: rgba(34, 197, 94, 0.2); color: var(--success); }
+        .badge-warning { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .badge-danger { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .badge-info { background: rgba(59, 130, 246, 0.2); color: var(--accent); }
+
+        .response-box {
+            background: var(--bg-primary);
+            padding: 15px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .pii-highlight {
+            background: rgba(239, 68, 68, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .kb-match {
+            padding: 10px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .kb-match-score {
+            float: right;
+            font-weight: 600;
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loader.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .test-samples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .sample-btn {
+            padding: 6px 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sample-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .flow-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .flow-step {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            opacity: 0.5;
+        }
+
+        .flow-step.active {
+            opacity: 1;
+            background: var(--accent);
+        }
+
+        .flow-step.done {
+            opacity: 1;
+            background: var(--success);
+        }
+
+        .flow-arrow {
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 hurAI Test Console</h1>
+            <p>Sprint 4: Core Engine Validation & Testing</p>
+        </header>
+
+        <div class="flow-indicator" id="flowIndicator">
+            <span class="flow-step" id="step-pii">PII</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step" id="step-classify">Classify</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step" id="step-kb">KB Search</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step" id="step-route">Route</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step" id="step-respond">Respond</span>
+        </div>
+
+        <div class="main-grid">
+            <!-- Input Section -->
+            <div class="card">
+                <h2><span class="icon">📝</span> Test Query</h2>
+                <textarea id="queryInput" placeholder="Enter a support query to test...
+Example: My email john@example.com is not syncing with Outlook. My phone is 555-123-4567."></textarea>
+                
+                <div class="test-samples">
+                    <button class="sample-btn" onclick="setSample('simple')">Simple Query</button>
+                    <button class="sample-btn" onclick="setSample('complex')">Complex Query</button>
+                    <button class="sample-btn" onclick="setSample('pii')">With PII</button>
+                    <button class="sample-btn" onclick="setSample('escalate')">Escalation</button>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="submitBtn" onclick="submitQuery()">
+                        🚀 Process Query
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearAll()">
+                        🗑️ Clear
+                    </button>
+                </div>
+
+                <div class="loader" id="loader">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 10px; color: var(--text-secondary);">Processing...</p>
+                </div>
+
+                <!-- PII Results -->
+                <div class="result-section" id="piiResults">
+                    <h3 style="margin-bottom: 10px;">🔒 PII Detection (US-19)</h3>
+                    <div class="metric">
+                        <span class="metric-label">Original Query</span>
+                    </div>
+                    <div class="response-box" id="originalQuery" style="margin: 10px 0;"></div>
+                    <div class="metric">
+                        <span class="metric-label">Anonymized Query</span>
+                    </div>
+                    <div class="response-box" id="anonymizedQuery" style="margin-top: 10px;"></div>
+                    <div id="piiSummary" style="margin-top: 10px;"></div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="card">
+                <h2><span class="icon">📊</span> Processing Results</h2>
+
+                <!-- Classification -->
+                <div class="result-section" id="classificationResults">
+                    <h3 style="margin-bottom: 10px;">🏷️ Classification (US-17)</h3>
+                    <div class="metric">
+                        <span class="metric-label">Complexity</span>
+                        <span class="metric-value" id="complexity">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Category</span>
+                        <span class="metric-value" id="category">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Confidence</span>
+                        <span class="metric-value" id="confidence">-</span>
+                    </div>
+                </div>
+
+                <!-- KB Matches -->
+                <div class="result-section" id="kbResults">
+                    <h3 style="margin-bottom: 10px;">📚 KB Matches</h3>
+                    <div id="kbMatchesList"></div>
+                </div>
+
+                <!-- Routing Decision -->
+                <div class="result-section" id="routingResults">
+                    <h3 style="margin-bottom: 10px;">🔀 Routing Decision (US-20)</h3>
+                    <div class="metric">
+                        <span class="metric-label">Route</span>
+                        <span class="metric-value" id="route">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Reason</span>
+                        <span class="metric-value" id="routeReason">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Uses KB</span>
+                        <span class="metric-value" id="requiresKB">-</span>
+                    </div>
+                    <div class="metric" id="ticketRow" style="display: none;">
+                        <span class="metric-label">Ticket ID</span>
+                        <span class="metric-value" id="ticketId">-</span>
+                    </div>
+                    <div class="metric" id="agentRow" style="display: none;">
+                        <span class="metric-label">👤 Assigned Agent</span>
+                        <span class="metric-value" id="assignedAgent">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Response Section (Full Width) -->
+            <div class="card" style="grid-column: 1 / -1;">
+                <h2><span class="icon">💬</span> LLM Response (US-18)</h2>
+                <div class="result-section" id="responseResults">
+                    <div class="metric">
+                        <span class="metric-label">Response Type</span>
+                        <span class="metric-value" id="responseType">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Provider</span>
+                        <span class="metric-value" id="provider">-</span>
+                    </div>
+                    <div class="response-box" id="llmResponse" style="margin-top: 15px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3001';
+
+        const samples = {
+            simple: "How do I reset my password?",
+            complex: "My server is throwing a 502 error after deploying to Kubernetes with custom ingress rules and the logs show connection timeouts to the backend pods.",
+            pii: "Hi, my name is John Smith and my email is john.smith@example.com. My phone number is 555-123-4567 and my credit card ending in 4242 was charged twice.",
+            escalate: "This is ridiculous! I want to talk to a real person. Your bot is useless and I'm very frustrated!"
+        };
+
+        function setSample(type) {
+            document.getElementById('queryInput').value = samples[type];
+        }
+
+        function resetFlow() {
+            ['pii', 'classify', 'kb', 'route', 'respond'].forEach(step => {
+                document.getElementById(`step-${step}`).classList.remove('active', 'done');
+            });
+        }
+
+        function setFlowStep(step, status) {
+            const el = document.getElementById(`step-${step}`);
+            el.classList.remove('active', 'done');
+            el.classList.add(status);
+        }
+
+        async function submitQuery() {
+            const query = document.getElementById('queryInput').value.trim();
+            if (!query) {
+                alert('Please enter a query');
+                return;
+            }
+
+            // Reset UI
+            resetFlow();
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('loader').classList.add('show');
+            
+            // Hide all result sections
+            document.querySelectorAll('.result-section').forEach(el => el.classList.remove('show'));
+
+            try {
+                // Step 1: PII
+                setFlowStep('pii', 'active');
+                await delay(300);
+                setFlowStep('pii', 'done');
+
+                // Step 2: Classify
+                setFlowStep('classify', 'active');
+                await delay(300);
+                setFlowStep('classify', 'done');
+
+                // Step 3: KB
+                setFlowStep('kb', 'active');
+                await delay(300);
+                setFlowStep('kb', 'done');
+
+                // Step 4: Route
+                setFlowStep('route', 'active');
+                
+                // Make API call
+                const response = await fetch(`${API_BASE}/api/router/query`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+
+                const data = await response.json();
+
+                setFlowStep('route', 'done');
+
+                // Step 5: Respond
+                setFlowStep('respond', 'active');
+                await delay(300);
+                setFlowStep('respond', 'done');
+
+                // Display results
+                displayResults(query, data);
+
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('loader').classList.remove('show');
+            }
+        }
+
+        function displayResults(originalQuery, data) {
+            // PII Results
+            document.getElementById('piiResults').classList.add('show');
+            document.getElementById('originalQuery').innerHTML = highlightPII(originalQuery);
+            document.getElementById('anonymizedQuery').textContent = data.anonymizedQuery || originalQuery;
+            
+            const piiSummary = data.piiDetected;
+            if (piiSummary && Object.values(piiSummary).some(v => v > 0)) {
+                let summaryHTML = '<div style="margin-top: 10px;">';
+                for (const [type, count] of Object.entries(piiSummary)) {
+                    if (count > 0) {
+                        summaryHTML += `<span class="badge badge-danger" style="margin-right: 5px;">${type}: ${count}</span>`;
+                    }
+                }
+                summaryHTML += '</div>';
+                document.getElementById('piiSummary').innerHTML = summaryHTML;
+            } else {
+                document.getElementById('piiSummary').innerHTML = '<span class="badge badge-success">No PII detected</span>';
+            }
+
+            // Classification Results
+            document.getElementById('classificationResults').classList.add('show');
+            const complexity = data.classification?.complexity || 0;
+            const complexityBadge = complexity <= 5 ? 'badge-success' : complexity <= 7 ? 'badge-warning' : 'badge-danger';
+            document.getElementById('complexity').innerHTML = `<span class="badge ${complexityBadge}">${complexity}/10</span>`;
+            document.getElementById('category').innerHTML = `<span class="badge badge-info">${data.classification?.category || 'N/A'}</span>`;
+            document.getElementById('confidence').textContent = ((data.classification?.confidence || 0) * 100).toFixed(0) + '%';
+
+            // KB Results
+            document.getElementById('kbResults').classList.add('show');
+            const kbList = document.getElementById('kbMatchesList');
+            if (data.kbMatches && data.kbMatches.length > 0) {
+                kbList.innerHTML = data.kbMatches.map(match => {
+                    const scoreBadge = match.score >= 0.7 ? 'badge-success' : match.score >= 0.5 ? 'badge-warning' : 'badge-danger';
+                    return `
+                        <div class="kb-match">
+                            <span class="kb-match-score badge ${scoreBadge}">${(match.score * 100).toFixed(0)}%</span>
+                            <strong>${match.id}</strong>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px;">${match.preview}</p>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                kbList.innerHTML = '<p style="color: var(--text-secondary);">No KB matches found</p>';
+            }
+
+            // Routing Results
+            document.getElementById('routingResults').classList.add('show');
+            const route = data.decision?.route || 'unknown';
+            const routeBadge = route === 'self-service' ? 'badge-success' : 'badge-warning';
+            document.getElementById('route').innerHTML = `<span class="badge ${routeBadge}">${route}</span>`;
+            
+            // Show reason with keyword if available
+            let reasonText = data.decision?.reason || 'N/A';
+            if (data.decision?.keyword) {
+                reasonText += ` (keyword: "${data.decision.keyword}")`;
+            }
+            document.getElementById('routeReason').textContent = reasonText;
+            document.getElementById('requiresKB').innerHTML = data.decision?.requiresKB 
+                ? '<span class="badge badge-info">Yes</span>' 
+                : '<span class="badge badge-secondary">No</span>';
+
+            // Show ticket info if escalated
+            if (data.ticket) {
+                document.getElementById('ticketRow').style.display = 'flex';
+                document.getElementById('ticketId').innerHTML = `<span class="badge badge-info">${data.ticket.id}</span>`;
+            } else {
+                document.getElementById('ticketRow').style.display = 'none';
+            }
+
+            // Show assigned agent if available
+            if (data.assignedAgent) {
+                document.getElementById('agentRow').style.display = 'flex';
+                document.getElementById('assignedAgent').innerHTML = `<span class="badge badge-success">${data.assignedAgent.name} (${data.assignedAgent.email})</span>`;
+            } else if (route === 'agent') {
+                document.getElementById('agentRow').style.display = 'flex';
+                document.getElementById('assignedAgent').innerHTML = `<span class="badge badge-danger">No agents available</span>`;
+            } else {
+                document.getElementById('agentRow').style.display = 'none';
+            }
+
+            // Response Results
+            document.getElementById('responseResults').classList.add('show');
+            document.getElementById('responseType').innerHTML = `<span class="badge badge-info">${data.response?.responseType || 'N/A'}</span>`;
+            document.getElementById('provider').textContent = data.response?.provider || 'N/A';
+            document.getElementById('llmResponse').textContent = data.response?.message || 'No response generated (escalated to agent)';
+        }
+
+        function highlightPII(text) {
+            // Simple PII highlighting
+            return text
+                .replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, '<span class="pii-highlight">$&</span>')
+                .replace(/\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/g, '<span class="pii-highlight">$&</span>')
+                .replace(/\b\d{4}\b(?=\s*(was|were|is|are|charged|for))/gi, '<span class="pii-highlight">$&</span>');
+        }
+
+        function clearAll() {
+            document.getElementById('queryInput').value = '';
+            document.querySelectorAll('.result-section').forEach(el => el.classList.remove('show'));
+            resetFlow();
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+    </script>
+</body>
+</html>

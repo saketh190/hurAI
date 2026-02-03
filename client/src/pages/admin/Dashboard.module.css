@@ -1,0 +1,95 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.card {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.cardHeader h3 {
+    font-size: 16px;
+    color: #666;
+    font-weight: 500;
+}
+
+.icon {
+    font-size: 24px;
+}
+
+.stat {
+    font-size: 36px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.label {
+    font-size: 14px;
+    color: #999;
+}
+
+.section {
+    margin-top: 40px;
+}
+
+.section h2 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.linkGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.linkCard {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.linkCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.linkIcon {
+    font-size: 32px;
+}
+
+.linkCard h4 {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.linkCard p {
+    font-size: 13px;
+    color: #999;
+}

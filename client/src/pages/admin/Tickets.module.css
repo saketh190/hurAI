@@ -1,0 +1,116 @@
+.header {
+    margin-bottom: 24px;
+}
+
+.filters {
+    display: flex;
+    gap: 12px;
+}
+
+.filter,
+.activeFilter {
+    padding: 10px 20px;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter:hover {
+    background: #f9f9f9;
+}
+
+.activeFilter {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.empty {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 12px;
+    color: #999;
+}
+
+.list {
+    display: grid;
+    gap: 16px;
+}
+
+.ticketCard {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.ticketCard:hover {
+    transform: translateY(-2px);
+}
+
+.ticketHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.ticketId {
+    font-family: monospace;
+    font-size: 13px;
+    color: #999;
+    margin-right: 12px;
+}
+
+.status {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.statusOpen {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.statusInProgress {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.statusResolved {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.category {
+    padding: 6px 12px;
+    background: #f0f0f0;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+}
+
+.ticketTitle {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.ticketMeta {
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    color: #999;
+}

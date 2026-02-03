@@ -1,0 +1,231 @@
+.container {
+    display: flex;
+    gap: 0;
+    height: calc(100vh - 200px);
+}
+
+.ticketContent {
+    flex: 1;
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow-y: auto;
+}
+
+.statusBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.statusBadge {
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.statusopen {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.statusinprogress {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.statusresolved {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.resolveBtn {
+    padding: 10px 20px;
+    background: #22c55e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.resolveBtn:hover {
+    background: #16a34a;
+}
+
+.section {
+    margin-bottom: 32px;
+}
+
+.section h3 {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.query {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #666;
+    padding: 16px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.textarea {
+    width: 100%;
+    padding: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    margin-bottom: 12px;
+}
+
+.textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.submitBtn {
+    padding: 12px 32px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.submitBtn:hover {
+    background: #5568d3;
+}
+
+.previousResponse {
+    padding: 16px;
+    background: #e0ffe0;
+    border-radius: 8px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.assistantClosed {
+    width: 60px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: width 0.3s;
+}
+
+.assistantOpen {
+    width: 400px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: width 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.assistantHeader {
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.assistantHeader h3 {
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.toggleBtn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 12px;
+    border-radius: 4px;
+}
+
+.assistantContent {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.assistantInput {
+    margin-bottom: 20px;
+}
+
+.assistantInput textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: none;
+    margin-bottom: 12px;
+}
+
+.assistantInput textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.assistantInput button {
+    width: 100%;
+    padding: 12px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.assistantInput button:hover:not(:disabled) {
+    background: #5568d3;
+}
+
+.assistantInput button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.assistantResponse {
+    padding: 16px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.assistantResponse h4 {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.assistantResponse p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+}

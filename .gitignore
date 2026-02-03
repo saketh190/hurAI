@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+
+# Environment variables - NEVER commit these!
+.env
+.env.local
+.env.production
+.env.development
+.env*.local
+
+# Firebase/Google credentials - NEVER commit these!
+serviceAccountKey.json
+*serviceAccount*.json
+firebase-adminsdk*.json
+*.pem
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE/Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+.project
+.classpath
+.settings/
+
+# Build outputs
+dist/
+build/
+.cache/
+.parcel-cache/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Vercel
+.vercel/
+
+# Misc
+*.local
+.eslintcache
