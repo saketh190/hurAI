@@ -10,6 +10,7 @@ Prompts for generating user interface designs and interactive prototypes.
 ```
 Create a mobile-first responsive web interface for hurAI end-user support portal.
 
+
 Design Requirements:
 - Modern, clean design with dark mode support
 - Mobile-first layout (works on 375px+ screens)
