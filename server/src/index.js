@@ -12,8 +12,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import demoRoutes from './routes/demo.routes.js';
 import kbRoutes from './routes/kb.routes.js';
 import routerRoutes from './routes/router.routes.js';
-import ticketRoutes from './routes/ticket.routes.js';
-import agentRoutes from './routes/agent.routes.js';
 import { getLLMService } from './core/llm/index.js';
 import { initializeFirebase } from './config/firebase.config.js';
 
@@ -33,19 +31,18 @@ app.use((req, res, next) => {
     next();
 });
 
-// Routes
+// Routes - AI/LLM Core Engine Only
 app.use('/api/demo', demoRoutes);
 app.use('/api/kb', kbRoutes);
 app.use('/api/router', routerRoutes);
-app.use('/api/tickets', ticketRoutes);
-app.use('/api/agents', agentRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
     res.json({
-        name: 'hurAI Core Engine',
+        name: 'hurAI Core Engine - AI/LLM Services',
         version: '2.0.0',
         status: 'running',
+        description: 'AI-powered classification, routing, and knowledge base search. CRUD operations handled by UI.',
         endpoints: {
             router: {
                 query: 'POST /api/router/query',
@@ -62,7 +59,7 @@ app.get('/', (req, res) => {
                 index: 'POST /api/kb/index',
                 search: 'POST /api/kb/search',
                 chunks: 'GET /api/kb/chunks',
-                draft: 'POST /api/kb/draft',
+                articles: 'GET /api/kb/articles/:id',
             },
         },
     });
@@ -99,31 +96,25 @@ async function start() {
         app.listen(PORT, () => {
             console.log(`\n========================================`);
             console.log(`  hurAI Core Engine v2.0`);
-            console.log(`  Server running on http://localhost:${PORT}`);
+            console.log(`  AI/LLM Services Only`);
+            console.log(`  Server: http://localhost:${PORT}`);
             console.log(`========================================\n`);
-            console.log('Demo endpoints:');
+            console.log('🤖 AI/LLM Endpoints:');
+            console.log('\n📊 Demo/Testing:');
             console.log('  POST /api/demo/classify    - Classify ticket');
             console.log('  POST /api/demo/llm         - Test LLM');
             console.log('  POST /api/demo/pii         - Test PII');
             console.log('  POST /api/demo/full-flow   - Complete flow');
             console.log('  GET  /api/demo/health      - Health check');
-            console.log('\nKB endpoints:');
+            console.log('\n📚 Knowledge Base:');
             console.log('  POST /api/kb/index         - Index KB files');
             console.log('  POST /api/kb/search        - Search KB');
             console.log('  GET  /api/kb/chunks        - List chunks');
-            console.log('  POST /api/kb/draft         - Generate draft');
-            console.log('\nRouter endpoints:');
+            console.log('  GET  /api/kb/articles/:id  - Get article');
+            console.log('\n🔀 Intelligent Router:');
             console.log('  POST /api/router/query     - Self-service query');
             console.log('  GET  /api/router/config    - Router config');
-            console.log('\nTicket endpoints:');
-            console.log('  POST /api/tickets          - Create ticket');
-            console.log('  GET  /api/tickets          - List open tickets');
-            console.log('  POST /api/tickets/:id/message  - Add message');
-            console.log('  POST /api/tickets/:id/escalate - Escalate');
-            console.log('  POST /api/tickets/:id/assign   - Assign agent');
-            console.log('\nAgent endpoints:');
-            console.log('  POST /api/agents           - Register agent');
-            console.log('  GET  /api/agents           - List agents\n');
+            console.log('\n💡 Note: Ticket/Agent CRUD handled by UI (direct Firestore)\n');
         });
     } catch (error) {
         console.error('[Server] Failed to start:', error);
