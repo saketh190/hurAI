@@ -121,30 +121,42 @@ export class DatabaseService {
 
     /**
      * Get open tickets (for agent dashboard)
+     * Note: Sorting in memory to avoid composite index requirement
      */
     async getOpenTickets() {
         this.initialize();
         const snapshot = await this.db
             .collection(this.ticketsCollection)
             .where('status', 'in', ['open', 'escalated'])
-            .orderBy('createdAt', 'desc')
             .get();
 
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        // Sort in memory to avoid composite index requirement
+        const tickets = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return tickets.sort((a, b) => {
+            const dateA = a.createdAt?.toDate?.() || new Date(a.createdAt) || new Date(0);
+            const dateB = b.createdAt?.toDate?.() || new Date(b.createdAt) || new Date(0);
+            return dateB - dateA; // Descending order
+        });
     }
 
     /**
      * Get tickets by status
+     * Note: Sorting in memory to avoid composite index requirement
      */
     async getTicketsByStatus(status) {
         this.initialize();
         const snapshot = await this.db
             .collection(this.ticketsCollection)
             .where('status', '==', status)
-            .orderBy('createdAt', 'desc')
             .get();
 
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        // Sort in memory to avoid composite index requirement
+        const tickets = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return tickets.sort((a, b) => {
+            const dateA = a.createdAt?.toDate?.() || new Date(a.createdAt) || new Date(0);
+            const dateB = b.createdAt?.toDate?.() || new Date(b.createdAt) || new Date(0);
+            return dateB - dateA; // Descending order
+        });
     }
 
     // ==================== AGENT OPERATIONS ====================

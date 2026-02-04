@@ -82,9 +82,36 @@ export function AuthProvider({ children }) {
         logout
     };
 
+    // Show loading screen while Firebase initializes
+    if (loading) {
+        return (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                backgroundColor: '#1a1a2e',
+                color: '#fff',
+                fontFamily: 'system-ui, sans-serif'
+            }}>
+                <div style={{
+                    width: '40px',
+                    height: '40px',
+                    border: '4px solid rgba(255,255,255,0.1)',
+                    borderTop: '4px solid #6366f1',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite'
+                }} />
+                <p style={{ marginTop: '16px', color: '#a0a0a0' }}>Loading hurAI...</p>
+                <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+            </div>
+        );
+    }
+
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children}
+            {children}
         </AuthContext.Provider>
     );
 }
