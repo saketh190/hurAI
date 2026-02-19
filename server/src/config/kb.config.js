@@ -5,13 +5,13 @@ export const kbConfig = {
     // Pinecone settings
     pinecone: {
         apiKey: process.env.PINECONE_API_KEY,
-        indexName: process.env.PINECONE_INDEX || 'hurai-kb',
+        indexName: process.env.PINECONE_INDEX || 'hurai',
     },
 
     // Embedding settings
     embedding: {
-        model: 'text-embedding-004', // Gemini embedding model
-        dimensions: 768,
+        model: 'gemini-embedding-001', // Verified via ListModels API
+        dimensions: 3072,              // gemini-embedding-001 outputs 3072 dims
     },
 
     // Search settings

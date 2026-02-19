@@ -1,0 +1,387 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.simulator {
+    width: 100%;
+    max-width: 500px;
+    height: 700px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 3px solid;
+}
+
+/* ── Header ── */
+
+.header {
+    padding: 15px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.channelTabs {
+    display: flex;
+    gap: 5px;
+}
+
+.tab,
+.activeTab {
+    flex: 1;
+    padding: 8px 12px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: all 0.2s;
+}
+
+.activeTab {
+    background: rgba(255, 255, 255, 0.3);
+    font-weight: 600;
+}
+
+.tab:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.tab:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.channelIcon {
+    font-size: 16px;
+}
+
+.headerInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerTitle {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.headerStatus {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+/* ── Messages area ── */
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.welcomeMessage {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.welcomeMessage h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.welcomeMessage p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* ── Message rows ── */
+
+.messageRow {
+    display: flex;
+    animation: slideIn 0.3s ease-out;
+}
+
+.messageRowRight {
+    justify-content: flex-end;
+}
+
+.messageRowLeft {
+    justify-content: flex-start;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Message bubbles ── */
+
+.messageBubble {
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    position: relative;
+}
+
+.userBubble {
+    background: #007bff;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.botBubble {
+    background: white;
+    color: #333;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.agentBubble {
+    background: #28a745;
+    color: white;
+    border-bottom-left-radius: 4px;
+}
+
+.agentLabel {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    opacity: 0.9;
+}
+
+.messageText {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.messageTime {
+    font-size: 10px;
+    margin-top: 5px;
+    opacity: 0.6;
+}
+
+.kbBadge {
+    font-size: 10px;
+    opacity: 0.7;
+}
+
+/* ── Typing indicator ── */
+
+.typingIndicator {
+    display: flex;
+    gap: 4px;
+    padding: 8px 0;
+}
+
+.typingIndicator span {
+    width: 8px;
+    height: 8px;
+    background: #999;
+    border-radius: 50%;
+    animation: typing 1.4s infinite;
+}
+
+.typingIndicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typingIndicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+
+    0%,
+    60%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.7;
+    }
+
+    30% {
+        transform: translateY(-10px);
+        opacity: 1;
+    }
+}
+
+/* ── Action buttons row (below bot message) ── */
+
+.actionRow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0 4px 4px;
+    animation: slideIn 0.3s ease-out;
+}
+
+.actionLabel {
+    font-size: 11px;
+    color: #999;
+    margin-right: 2px;
+}
+
+.resolvedBtn,
+.needHelpBtn {
+    padding: 5px 12px;
+    border: none;
+    border-radius: 16px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.resolvedBtn {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}
+
+.resolvedBtn:hover {
+    background: #c8e6c9;
+    transform: translateY(-1px);
+}
+
+.needHelpBtn {
+    background: #fff3e0;
+    color: #e65100;
+    border: 1px solid #ffe0b2;
+}
+
+.needHelpBtn:hover {
+    background: #ffe0b2;
+    transform: translateY(-1px);
+}
+
+/* ── Session End Banners ── */
+
+.resolvedBanner {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border: 1px solid #a5d6a7;
+    border-radius: 12px;
+    padding: 14px 18px;
+    text-align: center;
+    font-size: 14px;
+    color: #1b5e20;
+    font-weight: 500;
+    animation: slideIn 0.4s ease-out;
+}
+
+.escalatedBanner {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border: 1px solid #90caf9;
+    border-radius: 12px;
+    padding: 14px 18px;
+    text-align: center;
+    font-size: 14px;
+    color: #0d47a1;
+    font-weight: 500;
+    animation: slideIn 0.4s ease-out;
+}
+
+/* ── Input Area ── */
+
+.inputArea {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+    background: white;
+    border-top: 1px solid #e0e0e0;
+}
+
+.input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 14px;
+    resize: none;
+    font-family: inherit;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.input:disabled {
+    background: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.sendButton {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sendButton:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.sendButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.footer {
+    padding: 8px 15px;
+    background: #f5f5f5;
+    border-top: 1px solid #e0e0e0;
+    font-size: 11px;
+    color: #666;
+    text-align: center;
+}
+
+/* ── Scrollbar ── */
+
+.messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.messages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.messages::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.messages::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

@@ -79,6 +79,12 @@ export class KBService {
         // Chunk the content
         const chunks = this.chunker.chunkFile(content, fileName);
         console.log(`[KB] Created ${chunks.length} chunks from ${fileName}`);
+        console.log(`[KB] File content length: ${content.length} chars`);
+
+        if (chunks.length === 0) {
+            console.error('[KB] ERROR: No chunks created! Check TextChunker.');
+            return { chunks: 0, file: fileName };
+        }
 
         const vectors = [];
         for (const chunk of chunks) {
@@ -91,9 +97,11 @@ export class KBService {
             });
 
             // Generate embedding
+            console.log(`[KB]   Embedding chunk ${chunk.index}: "${chunk.content.substring(0, 60)}..."`);
             const embedding = await this.embeddingService.embed(chunk.content);
 
             if (embedding) {
+                console.log(`[KB]   ✅ Embedding OK, dimensions: ${embedding.length}`);
                 vectors.push({
                     id: chunkId,
                     values: embedding,
@@ -103,9 +111,13 @@ export class KBService {
                         preview: chunk.content.substring(0, 200),
                     }
                 });
-                console.log(`[KB]   Chunk ${chunk.index}: ${chunk.content.substring(0, 50)}...`);
+            } else {
+                console.error(`[KB]   ❌ Embedding FAILED for chunk ${chunk.index}`);
             }
         }
+
+
+
 
         // Upsert to Pinecone in batches
         if (vectors.length > 0) {

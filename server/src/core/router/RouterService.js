@@ -15,8 +15,8 @@ export class RouterService {
         this.piiService = null;
 
         // Thresholds
-        this.simpleComplexityMax = 5;       // Complexity <= 6: LLM answers directly
-        this.kbMinScore = 0.7;              // Minimum KB match score for complex queries
+        this.simpleComplexityMax = 5;       // Complexity <= 5: simpler query
+        this.kbMinScore = 0.5;              // Minimum score to consider a KB match usable
         this.kbMinMatches = 1;              // Minimum KB matches needed
     }
 
@@ -139,46 +139,46 @@ export class RouterService {
 
     /**
      * Make routing decision based on classification and KB matches
-     * 
+     *
      * Logic:
-     * - Simple queries (complexity <= 5): 
-     *   - If good KB match: LLM uses KB knowledge
-     *   - If no KB match: LLM answers directly (can still handle simple issues)
-     * - Complex queries (complexity > 5): 
-     *   - If good KB match: LLM uses KB knowledge
-     *   - If no KB match: Escalate to human agent (too complex for LLM alone)
+     * - ANY query with KB results (score >= kbMinScore): LLM answers ONLY from KB
+     * - ANY query with weak KB results (score < kbMinScore):
+     *   - Simple (complexity <= 5): Tell user KB doesn't cover this, offer escalation
+     *   - Complex (complexity > 5): Escalate to human agent
+     *
+     * The LLM must NEVER answer from its own training data.
      */
     makeDecision(classification, kbResults) {
         const { complexity, category, confidence } = classification;
-        const hasGoodKBMatch = kbResults.some(r => r.score >= this.kbMinScore);
+        const hasKBMatch = kbResults.length > 0 && kbResults[0].score >= this.kbMinScore;
         const topScore = kbResults[0]?.score || 0;
 
-        // Check if we have a good KB match (applies to both simple and complex)
-        if (hasGoodKBMatch) {
+        // KB match found — LLM must answer ONLY from KB
+        if (hasKBMatch) {
             return {
                 route: 'self-service',
-                reason: `${complexity <= this.simpleComplexityMax ? 'Simple' : 'Complex'} query with KB match - LLM will use knowledge base`,
+                reason: 'KB match found — response grounded in knowledge base',
                 confidence: Math.min(confidence, topScore),
                 requiresKB: true,
                 kbScore: topScore,
             };
         }
 
-        // No KB match - behavior differs based on complexity
+        // No KB match — simple query: tell user politely, offer escalation
         if (complexity <= this.simpleComplexityMax) {
-            // Simple query without KB match: LLM can still handle it directly
             return {
                 route: 'self-service',
-                reason: 'Simple query without KB match - LLM can handle directly',
-                confidence: confidence,
+                reason: 'No KB match — respond with honest limitation and offer escalation',
+                confidence: confidence * 0.4,
                 requiresKB: false,
+                noKBMatch: true,
             };
         }
 
-        // Complex query with NO KB match: Escalate to human agent
+        // No KB match + complex: escalate to human agent
         return {
             route: 'agent',
-            reason: 'Complex query with no KB match - requires human expertise',
+            reason: 'Complex query with no KB match — requires human expertise',
             priority: 'high',
             suggestedCategory: category,
             complexity: complexity,
@@ -186,92 +186,68 @@ export class RouterService {
     }
 
     /**
-     * Generate direct response for simple queries (no KB needed)
-     * Returns structured, step-by-step guidance
+     * Generate a response when no KB match was found.
+     * We do NOT let the LLM use its own knowledge — instead we tell the user
+     * honestly that we don't have an answer in our KB and offer escalation.
      */
     async generateDirectResponse(query) {
-        const prompt = `You are a helpful support assistant. Provide a structured, step-by-step response to help the user.
+        const message = [
+            `**I couldn't find a specific answer in our knowledge base for your query.**`,
+            ``,
+            `This might mean:`,
+            `- Your issue is unique and needs personalised assistance`,
+            `- Our support articles don't yet cover this topic`,
+            ``,
+            `**What you can do:**`,
+            `1. Try rephrasing your question with more specific keywords`,
+            `2. Type **"talk to agent"** to connect with a human support representative who can help you directly`,
+        ].join('\n');
 
-User Question: ${query}
-
-Respond in this EXACT format:
-
-**Understanding your issue:**
-[1-2 sentence summary of what the user is asking]
-
-**Steps to resolve:**
-1. [First step with clear action]
-2. [Second step if needed]
-3. [Additional steps as needed]
-
-**If this doesn't help:**
-You can type "talk to agent" to connect with a human support representative.
-
-Rules:
-- Keep steps clear and actionable
-- Use numbered lists, not bullets
-- Maximum 5 steps for simple issues
-- If unsure, acknowledge and offer escalation`;
-
-        try {
-            const result = await this.llmService.generateResponse(prompt);
-
-            return {
-                success: result.success,
-                message: result.message,
-                provider: result.provider,
-                responseType: 'guided-steps',
-                basedOnKB: false,
-            };
-        } catch (error) {
-            console.error('[Router] Direct response error:', error.message);
-            return {
-                success: false,
-                message: 'Unable to generate response. Please contact support.',
-                error: error.message,
-            };
-        }
+        return {
+            success: true,
+            message,
+            provider: 'static',
+            responseType: 'no-kb-match',
+            basedOnKB: false,
+        };
     }
 
     /**
-     * Generate KB-assisted response for complex queries
-     * Uses knowledge base content from previously solved issues
-     * Returns structured, step-by-step guidance based on KB
+     * Generate a KB-grounded response.
+     * The LLM is explicitly forbidden from using its own training knowledge.
+     * It MUST quote or paraphrase ONLY the KB articles provided.
      */
     async generateKBAssistedResponse(query, kbResults) {
         const kbContext = kbResults
             .slice(0, 3)
-            .map(r => r.content)
+            .map((r, i) => `[Article ${i + 1}]\n${r.content}`)
             .join('\n\n---\n\n');
 
-        const prompt = `You are a helpful support assistant. Use the knowledge base content to provide a structured, step-by-step response.
+        const prompt = `You are a support assistant. Answer the user's question using ONLY the KB articles below.
 
-Knowledge Base Content (from previously resolved issues):
+RULES:
+1. Use ONLY the information from the KB articles provided. Do NOT use your own training knowledge.
+2. The KB articles below have already been matched to the user's query by our search system. Treat them as relevant — even if the article title describes a slightly different scenario, the troubleshooting steps still apply. Use them.
+3. Present the solution steps from the KB articles. You may rephrase for clarity but do NOT invent new steps.
+4. NEVER say "our KB doesn't cover this" or "no article matches" when KB articles ARE provided below. The search already matched them.
+
+KB ARTICLES:
 ${kbContext}
 
-User Question: ${query}
+USER QUESTION: ${query}
 
-Respond in this EXACT format:
+Format your response as:
 
 **Understanding your issue:**
-[1-2 sentence summary based on matching KB content]
+[Brief summary of user's problem]
 
-**Steps to resolve (based on our knowledge base):**
-1. [First step with clear action from KB]
-2. [Second step if needed]
-3. [Additional steps as needed]
-
-**Additional notes:**
-[Any relevant warnings or tips from the KB content]
+**Steps to resolve:**
+1. [Step from KB]
+2. [Step from KB]
+3. [Continue from KB]
 
 **If this doesn't help:**
-You can type "talk to agent" to connect with a human support representative.
-
-Rules:
-- Base your response ONLY on the KB content provided
-- Use numbered steps, not bullets
-- If KB doesn't fully cover the issue, acknowledge what you can help with
-- Always offer escalation option at the end`;
+Type "talk to agent" to connect with a human support representative.`;
 
         try {
             const result = await this.llmService.generateResponse(prompt);

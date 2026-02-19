@@ -6,6 +6,8 @@ import { ConfirmDialog } from './components/ConfirmDialog';
 
 // Pages
 import Login from './pages/Login';
+import Simulator from './pages/Simulator';
+import KBTest from './pages/KBTest';
 import AdminDashboard from './pages/admin/Dashboard';
 import AdminAgents from './pages/admin/Agents';
 import AdminTickets from './pages/admin/Tickets';
@@ -24,6 +26,8 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/login" element={<Login />} />
+                    <Route path="/simulator" element={<Simulator />} />
+                    <Route path="/kb-test" element={<KBTest />} />
                     <Route path="/unauthorized" element={<Unauthorized />} />
 
                     {/* Admin Routes */}

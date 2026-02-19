@@ -12,6 +12,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import demoRoutes from './routes/demo.routes.js';
 import kbRoutes from './routes/kb.routes.js';
 import routerRoutes from './routes/router.routes.js';
+import conversationRoutes from './routes/conversation.routes.js';
+import kbTestRoutes from './routes/kb-test.routes.js';
 import { getLLMService } from './core/llm/index.js';
 import { initializeFirebase } from './config/firebase.config.js';
 
@@ -35,6 +37,8 @@ app.use((req, res, next) => {
 app.use('/api/demo', demoRoutes);
 app.use('/api/kb', kbRoutes);
 app.use('/api/router', routerRoutes);
+app.use('/api/conversation', conversationRoutes);
+app.use('/api/kb-test', kbTestRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -44,6 +48,12 @@ app.get('/', (req, res) => {
         status: 'running',
         description: 'AI-powered classification, routing, and knowledge base search. CRUD operations handled by UI.',
         endpoints: {
+            conversation: {
+                start: 'POST /api/conversation/start',
+                message: 'POST /api/conversation/:id/message',
+                history: 'GET /api/conversation/:id',
+                agentMessage: 'POST /api/conversation/:id/agent-message',
+            },
             router: {
                 query: 'POST /api/router/query',
                 config: 'GET /api/router/config',
@@ -114,6 +124,11 @@ async function start() {
             console.log('\n🔀 Intelligent Router:');
             console.log('  POST /api/router/query     - Self-service query');
             console.log('  GET  /api/router/config    - Router config');
+            console.log('\n💬 Conversations:');
+            console.log('  POST /api/conversation/start           - Start conversation');
+            console.log('  POST /api/conversation/:id/message     - Send message');
+            console.log('  GET  /api/conversation/:id             - Get history');
+            console.log('  POST /api/conversation/:id/agent-message - Agent response');
             console.log('\n💡 Note: Ticket/Agent CRUD handled by UI (direct Firestore)\n');
         });
     } catch (error) {
